@@ -390,9 +390,22 @@ Here is an example command and error message:
 	C:\Program Files\Docker\Docker\Resources\bin\docker.exe: Error while pulling image: Get https://index.docker.io/v1/repositories/library/hello-world/images: dial tcp: lookup index.docker.io on 10.0.75.1:53: no such host.
 	See 'C:\Program Files\Docker\Docker\Resources\bin\docker.exe run --help'.
 
-As an immediate workaround to this problem, reset the DNS server to use the Google DNS fixed address: `8.8.8.8`. You can configure this via the **Settings** -> **Network** dialog, as described in the topic [Network](index.md#network). Docker will automatically restart when you apply this setting, which could take some time.
-
+Case "DNS issue": As an immediate workaround to this problem, reset the DNS server to use the Google DNS fixed address: `8.8.8.8`. You can configure this via the **Settings** -> **Network** dialog, as described in the topic [Network](index.md#network). Docker will automatically restart when you apply this setting, which could take some time.
 We are currently investigating this issue.
+
+Case "Docker behind corporate firewall and needs to connect via proxy": You will see exactly the same error as in the example in this case - when you cannot browse directly internet from a network, but need to set access via proxy.
+
+Solution: On Windows, after installing "Docker Toolbox.exe" -- but BEFOE running "Docker Quickstart Terminal" -- right click the executable of your favorite text editor (better not to be Notepad since there are usually some formatting problems with it) and choose "Run as administrator". Load file "C:\Program Files\Docker Toolbox\start.sh" and after the first line, add your HTTP and HTTPS proxies (IP addresses and ports below are example ones - you have to find your particular ones):
+
+export http_proxy=http://1.1.1.1:80
+export https_proxy=https://2.2.2.2:8080
+
+Now start "Docker Quickstart Terminal" - you will not have the error anymore.
+But this fix is not completed yet - if younow try to pull a docker, you will get a similar error, but inside the Docker console. To fix that, follow the steps in http://mflo.io/2015/08/13/docker-machine-behind-proxy/ to set these same proxies - this time, for the docker machine itself.
+Now you should be able to pull with no network errors.
+
+
+
 
 #### Networking issues on pre Beta 10 versions
 Docker for Windows Beta 10 and later fixed a number of issues around the
